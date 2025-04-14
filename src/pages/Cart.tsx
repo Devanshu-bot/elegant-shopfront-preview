@@ -1,4 +1,3 @@
-
 import { useCart } from "@/context/CartContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -263,7 +262,7 @@ const Cart = () => {
                                   </Button>
                                   <button 
                                     onClick={() => {
-                                      setSavedItems(savedItems.filter((_, i) => i !== index));
+                                      removeFromCart(index);
                                       toast.info("Item removed from saved items");
                                     }}
                                     className="text-red-500 hover:text-red-700 p-1"
