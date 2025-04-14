@@ -52,6 +52,13 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// E-commerce specific colors
+				product: {
+					DEFAULT: '#403E43',
+					light: '#F1F0FB',
+					accent: '#9b87f5',
+					secondary: '#7E69AB'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
