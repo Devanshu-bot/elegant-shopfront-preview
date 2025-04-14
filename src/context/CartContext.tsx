@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Product, ProductVariant } from "@/utils/mockData";
+import { Product, ProductVariant } from "@/types/product";
 import { toast } from "sonner";
 
 export interface CartItem {
@@ -19,6 +19,12 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  applyPromoCode: (code: string) => void;
+  promoDiscount: number;
+  estimatedDeliveryDays: number;
+  saveForLater: (itemId: number) => void;
+  savedItems: CartItem[];
+  moveToCart: (itemId: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -33,6 +39,9 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [savedItems, setSavedItems] = useState<CartItem[]>([]);
+  const [promoDiscount, setPromoDiscount] = useState(0);
+  const [estimatedDeliveryDays, setEstimatedDeliveryDays] = useState(3);
 
   const addToCart = (item: CartItem) => {
     // Check if product already exists with same variants
@@ -77,12 +86,45 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     toast.info("Cart cleared");
   };
 
+  const saveForLater = (itemId: number) => {
+    const itemToSave = items[itemId];
+    setSavedItems([...savedItems, itemToSave]);
+    setItems(items.filter((_, index) => index !== itemId));
+    toast.success("Item saved for later");
+  };
+
+  const moveToCart = (itemId: number) => {
+    const itemToMove = savedItems[itemId];
+    addToCart(itemToMove);
+    setSavedItems(savedItems.filter((_, index) => index !== itemId));
+  };
+
+  const applyPromoCode = (code: string) => {
+    // Simple promo code logic - in real app would validate against backend
+    const validPromoCodes: Record<string, number> = {
+      'WELCOME10': 10,
+      'SPRING25': 25,
+      'SAVE15': 15
+    };
+    
+    if (code in validPromoCodes) {
+      setPromoDiscount(validPromoCodes[code]);
+      toast.success(`Promo code applied! ${validPromoCodes[code]}% discount`);
+    } else {
+      toast.error("Invalid promo code");
+    }
+  };
+
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
   
-  const totalPrice = items.reduce(
+  const subtotal = items.reduce(
     (total, item) => total + item.product.price * item.quantity, 
     0
   );
+
+  const discount = subtotal * (promoDiscount / 100);
+  const tax = (subtotal - discount) * 0.07; // 7% tax rate
+  const totalPrice = subtotal - discount + tax;
 
   return (
     <CartContext.Provider
@@ -94,6 +136,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         totalItems,
         totalPrice,
+        applyPromoCode,
+        promoDiscount,
+        estimatedDeliveryDays,
+        saveForLater,
+        savedItems,
+        moveToCart
       }}
     >
       {children}
