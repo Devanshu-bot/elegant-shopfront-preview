@@ -1,7 +1,9 @@
-import { RelatedProduct } from "@/utils/mockData";
+
+import { RelatedProduct } from "@/types/product";
 import { Star } from "lucide-react";
 import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 interface RelatedProductsProps {
   products: RelatedProduct[];
@@ -66,7 +68,8 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
           onScroll={handleScroll}
         >
           {products.map((product) => (
-            <div 
+            <Link 
+              to={`/products/${product.id}`}
               key={product.id}
               className="min-w-[240px] md:min-w-[280px] snap-start bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex-shrink-0 border border-gray-100"
             >
@@ -94,7 +97,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         
@@ -114,8 +117,6 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
           </svg>
         </button>
       </div>
-      
-      {/* Custom styles are applied through Tailwind classes */}
     </section>
   );
 }
