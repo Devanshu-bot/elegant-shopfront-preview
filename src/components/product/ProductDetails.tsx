@@ -3,25 +3,62 @@ import { useState } from "react";
 import { Product, ProductVariant } from "@/utils/mockData";
 import { ProductVariants } from "./ProductVariants";
 import { Star, Truck, ShoppingBag, Heart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface ProductDetailsProps {
   product: Product;
 }
 
 export function ProductDetails({ product }: ProductDetailsProps) {
-  const [selectedColor, setSelectedColor] = useState<ProductVariant | null>(null);
-  const [selectedSize, setSelectedSize] = useState<ProductVariant | null>(null);
+  const [selectedColor, setSelectedColor] = useState<ProductVariant | null>(
+    product.variants.colors.find(v => v.inStock) || null
+  );
+  const [selectedSize, setSelectedSize] = useState<ProductVariant | null>(
+    product.variants.sizes.find(v => v.inStock) || null
+  );
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist();
+  const navigate = useNavigate();
 
   // Handle add to cart
   const handleAddToCart = () => {
+    if (!selectedColor) {
+      toast.error("Please select a color");
+      return;
+    }
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
+    addToCart({
+      id: Date.now(), // Unique id for cart item
+      product,
+      color: selectedColor,
+      size: selectedSize,
+      quantity,
+    });
+
     console.log("Adding to cart:", {
       product: product.name,
       color: selectedColor?.name,
       size: selectedSize?.name,
       quantity,
     });
-    // This would connect to your backend in the future
+  };
+
+  // Handle wishlist toggle
+  const handleWishlistToggle = () => {
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   return (
@@ -139,17 +176,27 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
-        <button
+        <Button
           onClick={handleAddToCart}
           className="flex-1 bg-product-accent text-white py-3 px-6 rounded-lg font-medium hover:bg-product-secondary transition-colors flex items-center justify-center"
         >
           <ShoppingBag className="w-5 h-5 mr-2" />
           Add to Cart
-        </button>
-        <button className="flex items-center justify-center py-3 px-6 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-          <Heart className="w-5 h-5 mr-2" />
-          Save to Wishlist
-        </button>
+        </Button>
+        <Button
+          onClick={handleWishlistToggle}
+          variant="outline"
+          className={`flex items-center justify-center py-3 px-6 border rounded-lg font-medium transition-colors ${
+            isInWishlist(product.id) 
+              ? "bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100" 
+              : "border-gray-300 hover:bg-gray-50"
+          }`}
+        >
+          <Heart 
+            className={`w-5 h-5 mr-2 ${isInWishlist(product.id) ? "fill-pink-500 text-pink-500" : ""}`} 
+          />
+          {isInWishlist(product.id) ? "Saved to Wishlist" : "Save to Wishlist"}
+        </Button>
       </div>
 
       {/* Shipping Info */}
