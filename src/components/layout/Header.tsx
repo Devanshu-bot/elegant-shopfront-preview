@@ -1,6 +1,6 @@
 
 import { Search, ShoppingBag, User, Menu } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 
 export function Header() {
@@ -26,9 +26,9 @@ export function Header() {
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
-            <a onClick={() => navigate('/')} className="text-gray-700 hover:text-product-accent cursor-pointer">Home</a>
-            <a onClick={() => navigate('/products')} className="text-gray-700 hover:text-product-accent cursor-pointer">Shop</a>
-            <a onClick={() => navigate('/products')} className="text-gray-700 hover:text-product-accent cursor-pointer">Categories</a>
+            <Link to="/" className="text-gray-700 hover:text-product-accent cursor-pointer">Home</Link>
+            <Link to="/products" className="text-gray-700 hover:text-product-accent cursor-pointer">Shop</Link>
+            <Link to="/products" className="text-gray-700 hover:text-product-accent cursor-pointer">Categories</Link>
             <a className="text-gray-700 hover:text-product-accent cursor-pointer">About</a>
             <a className="text-gray-700 hover:text-product-accent cursor-pointer">Contact</a>
           </nav>
@@ -41,9 +41,9 @@ export function Header() {
             <button className="p-2 rounded-md hover:bg-gray-100">
               <User className="h-5 w-5" />
             </button>
-            <button 
+            <Link 
+              to="/cart"
               className="p-2 rounded-md hover:bg-gray-100 relative"
-              onClick={() => navigate('/cart')}
               aria-label="Shopping Cart"
             >
               <ShoppingBag className="h-5 w-5" />
@@ -52,7 +52,7 @@ export function Header() {
                   {totalItems}
                 </span>
               )}
-            </button>
+            </Link>
           </div>
         </div>
       </div>
