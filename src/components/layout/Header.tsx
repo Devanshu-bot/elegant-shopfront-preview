@@ -2,10 +2,12 @@
 import { Search, ShoppingBag, User, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 export function Header() {
   const navigate = useNavigate();
   const { totalItems } = useCart();
+  const { user, logout } = useAuth();
 
   return (
     <header className="border-b border-gray-200">
@@ -38,9 +40,17 @@ export function Header() {
             <button className="p-2 rounded-md hover:bg-gray-100">
               <Search className="h-5 w-5" />
             </button>
-            <button className="p-2 rounded-md hover:bg-gray-100">
-              <User className="h-5 w-5" />
-            </button>
+
+            {/* User dropdown */}
+            <div className="relative">
+              <button
+                className="p-2 rounded-md hover:bg-gray-100"
+                onClick={() => user ? navigate('/auth/change-password') : navigate('/auth/login')}
+              >
+                <User className="h-5 w-5" />
+              </button>
+            </div>
+
             <Link 
               to="/cart"
               className="p-2 rounded-md hover:bg-gray-100 relative"
