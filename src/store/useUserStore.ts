@@ -7,6 +7,8 @@ export interface User {
   fullName: string;
   email: string;
   mobileNumber: string;
+  avatar?: string;
+  location?: string;
 }
 
 interface UserState {

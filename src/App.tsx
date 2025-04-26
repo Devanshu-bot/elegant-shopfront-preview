@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +15,7 @@ import RegisterScreen from "./pages/auth/RegisterScreen";
 import VerifyScreen from "./pages/auth/VerifyScreen";
 import ForgotPasswordScreen from "./pages/auth/ForgotPasswordScreen";
 import ResetPasswordScreen from "./pages/auth/ResetPasswordScreen";
+import Profile from "./pages/Profile";
 import { BottomNav } from "./components/navigation/BottomNav";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";

@@ -10,31 +10,10 @@ import {
   User, 
   HeadphonesIcon, 
   Heart,
-  ChevronRight,
   LogOut
 } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
-
-const ProfileMenuItem = ({ 
-  icon: Icon, 
-  label, 
-  onClick 
-}: { 
-  icon: any, 
-  label: string, 
-  onClick: () => void 
-}) => (
-  <button
-    onClick={onClick}
-    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
-  >
-    <div className="flex items-center space-x-3">
-      <Icon className="h-5 w-5 text-gray-500" />
-      <span className="text-gray-700">{label}</span>
-    </div>
-    <ChevronRight className="h-5 w-5 text-gray-400" />
-  </button>
-);
+import { ProfileMenuItem } from "@/components/profile/ProfileMenuItem";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -57,8 +36,9 @@ export default function Profile() {
           {/* Profile Header */}
           <div className="p-6 flex items-center space-x-4 border-b border-gray-100">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={user?.avatar} />
-              <AvatarFallback>{user?.fullName?.[0]}</AvatarFallback>
+              {/* Handle potential missing avatar */}
+              <AvatarImage src={user?.avatar || undefined} />
+              <AvatarFallback>{user?.fullName?.[0] || "U"}</AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-xl font-semibold text-gray-900">
