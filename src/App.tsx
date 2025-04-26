@@ -16,31 +16,40 @@ import VerifyScreen from "./pages/auth/VerifyScreen";
 import ForgotPasswordScreen from "./pages/auth/ForgotPasswordScreen";
 import ResetPasswordScreen from "./pages/auth/ResetPasswordScreen";
 import { BottomNav } from "./components/navigation/BottomNav";
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:productId" element={<ProductDetail />} />
-        
-        <Route path="/auth/login" element={<LoginScreen />} />
-        <Route path="/auth/register" element={<RegisterScreen />} />
-        <Route path="/auth/verify" element={<VerifyScreen />} />
-        <Route path="/auth/forgot-password" element={<ForgotPasswordScreen />} />
-        <Route path="/auth/reset-password" element={<ResetPasswordScreen />} />
-        
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <BottomNav />
-    </TooltipProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:productId" element={<ProductDetail />} />
+              
+              <Route path="/auth/login" element={<LoginScreen />} />
+              <Route path="/auth/register" element={<RegisterScreen />} />
+              <Route path="/auth/verify" element={<VerifyScreen />} />
+              <Route path="/auth/forgot-password" element={<ForgotPasswordScreen />} />
+              <Route path="/auth/reset-password" element={<ResetPasswordScreen />} />
+              
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <BottomNav />
+          </TooltipProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
