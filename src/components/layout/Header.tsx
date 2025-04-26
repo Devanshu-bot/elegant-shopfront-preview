@@ -1,13 +1,32 @@
 
 import { Search, ShoppingBag, User, Menu } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { useAuth } from "@/context/AuthContext";
+import { useUserStore } from "@/store/useUserStore";
+import { toast } from "sonner";
 
 export function Header() {
   const navigate = useNavigate();
   const { totalItems } = useCart();
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useUserStore();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("You've been logged out");
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const handleUserClick = () => {
+    if (isAuthenticated) {
+      navigate('/auth/reset-password');
+    } else {
+      navigate('/auth/login');
+    }
+  };
 
   return (
     <header className="border-b border-gray-200">
@@ -44,12 +63,27 @@ export function Header() {
             {/* User dropdown */}
             <div className="relative">
               <button
-                className="p-2 rounded-md hover:bg-gray-100"
-                onClick={() => user ? navigate('/auth/change-password') : navigate('/auth/login')}
+                className="p-2 rounded-md hover:bg-gray-100 flex items-center"
+                onClick={handleUserClick}
               >
                 <User className="h-5 w-5" />
+                {isAuthenticated && (
+                  <span className="ml-2 text-sm hidden md:inline">
+                    {user?.fullName?.split(' ')[0]}
+                  </span>
+                )}
               </button>
             </div>
+
+            {/* Show logout only if authenticated */}
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                className="text-sm text-gray-600 hover:text-product-accent hidden md:block"
+              >
+                Logout
+              </button>
+            )}
 
             <Link 
               to="/cart"
