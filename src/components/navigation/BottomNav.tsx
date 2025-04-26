@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 
 export function BottomNav() {
   const location = useLocation();
-
   const isActive = (path: string) => location.pathname === path;
 
   return (
