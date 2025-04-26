@@ -1,3 +1,4 @@
+
 import { useCart } from "@/context/CartContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -45,7 +46,7 @@ const Cart = () => {
   };
 
   // Calculate order summary values
-  const subtotal = items.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+  const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
   const discount = subtotal * (promoDiscount / 100);
   const tax = (subtotal - discount) * 0.07; // 7% tax
 
@@ -98,13 +99,13 @@ const Cart = () => {
                                 <div className="flex items-center space-x-4">
                                   <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded bg-gray-100">
                                     <img 
-                                      src={item.product.images[0].src} 
-                                      alt={item.product.name} 
+                                      src={item.image} 
+                                      alt={item.name} 
                                       className="h-full w-full object-cover object-center"
                                     />
                                   </div>
                                   <div>
-                                    <h3 className="text-base font-medium text-gray-900 mb-1">{item.product.name}</h3>
+                                    <h3 className="text-base font-medium text-gray-900 mb-1">{item.name}</h3>
                                     <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                                       {item.color && (
                                         <span className="flex items-center">
@@ -123,7 +124,7 @@ const Cart = () => {
                                 </div>
                               </TableCell>
                               <TableCell className="text-sm text-gray-700">
-                                ${item.product.price.toFixed(2)}
+                                ${item.price.toFixed(2)}
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center border rounded-md w-fit">
@@ -158,7 +159,7 @@ const Cart = () => {
                                 </div>
                               </TableCell>
                               <TableCell className="font-medium">
-                                ${calculateSubtotal(item.product.price, item.quantity)}
+                                ${calculateSubtotal(item.price, item.quantity)}
                               </TableCell>
                               <TableCell className="text-right">
                                 <div className="flex justify-end space-x-2">

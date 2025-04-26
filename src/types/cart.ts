@@ -6,6 +6,13 @@ export interface CartItem {
   price: number;
   variantId?: string;
   quantity: number;
+  color?: {
+    name: string;
+    value: string;
+  };
+  size?: {
+    name: string;
+  };
 }
 
 export interface Wishlist {

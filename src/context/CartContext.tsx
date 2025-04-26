@@ -43,7 +43,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       name: item.product?.name || item.name,
       image: item.product?.images?.[0]?.src || item.image,
       price: item.product?.price || item.price,
-      quantity: item.quantity || 1
+      quantity: item.quantity || 1,
+      color: item.color,
+      size: item.size
     });
     toast.success('Added to cart');
   };
