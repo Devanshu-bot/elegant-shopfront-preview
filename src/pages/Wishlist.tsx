@@ -13,24 +13,13 @@ const Wishlist = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const handleAddToCart = (productId: number) => {
-    const product = items.find(item => item.id === productId);
-    if (product) {
-      // Get first available color and size
-      const color = product.variants.colors.find(c => c.inStock) || null;
-      const size = product.variants.sizes.find(s => s.inStock) || null;
-
-      if (!color || !size) {
-        toast.error("Please select product options on the product page");
-        navigate(`/product/${product.id}`);
-        return;
-      }
-
+  const handleAddToCart = (item) => {
+    if (item) {
       addToCart({
-        id: Date.now(),
-        product,
-        color,
-        size,
+        id: item.productId,
+        name: item.name,
+        image: item.image,
+        price: item.price,
         quantity: 1
       });
       
@@ -60,15 +49,15 @@ const Wishlist = () => {
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {items.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                <div key={product.productId} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
                   <div className="relative h-64 bg-gray-100">
                     <img 
-                      src={product.images[0].src} 
+                      src={product.image} 
                       alt={product.name} 
                       className="h-full w-full object-cover"
                     />
                     <button 
-                      onClick={() => removeFromWishlist(product.id)}
+                      onClick={() => removeFromWishlist(product.productId)}
                       className="absolute top-3 right-3 bg-white rounded-full p-1.5 shadow-sm hover:bg-gray-50"
                     >
                       <Trash2 className="h-5 w-5 text-red-500" />
@@ -78,22 +67,17 @@ const Wishlist = () => {
                     <h2 className="text-lg font-medium text-gray-900 mb-1">{product.name}</h2>
                     <div className="flex items-center mb-3">
                       <span className="text-product-accent font-medium">${product.price.toFixed(2)}</span>
-                      {product.originalPrice && (
-                        <span className="ml-2 text-gray-500 line-through text-sm">
-                          ${product.originalPrice.toFixed(2)}
-                        </span>
-                      )}
                     </div>
                     <div className="flex space-x-2">
                       <Button 
-                        onClick={() => navigate(`/`)}
+                        onClick={() => navigate('/')}
                         variant="outline" 
                         className="flex-1 text-sm"
                       >
                         View Details
                       </Button>
                       <Button 
-                        onClick={() => handleAddToCart(product.id)}
+                        onClick={() => handleAddToCart(product)}
                         className="flex-1 bg-product-accent hover:bg-product-secondary text-sm"
                       >
                         <ShoppingBag className="h-4 w-4 mr-1" />

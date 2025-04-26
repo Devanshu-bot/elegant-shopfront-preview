@@ -36,7 +36,10 @@ export const useWishlistStore = create<WishlistState>()(
         const item = get().items.find(item => item.productId === productId);
         if (item) {
           useCartStore.getState().addItem({
-            ...item,
+            productId: item.productId,
+            name: item.name,
+            image: item.image,
+            price: item.price,
             quantity: 1,
           });
           get().removeFromWishlist(productId);

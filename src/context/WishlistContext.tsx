@@ -4,7 +4,7 @@ import { useWishlistStore } from '@/store/useWishlistStore';
 import { Wishlist } from '@/types/cart';
 
 interface WishlistContextType {
-  items: any[];
+  items: Wishlist[];
   addToWishlist: (item: any) => void;
   removeFromWishlist: (productId: number) => void;
   isInWishlist: (productId: number) => boolean;
