@@ -9,33 +9,36 @@ import { toast } from "sonner";
 import { CartItem } from "@/components/cart/CartItem";
 import { SavedForLaterItem } from "@/components/cart/SavedForLaterItem";
 import { AddressSelector } from "@/components/cart/AddressSelector";
-import { BillSummary } from "@/components/cart/BillSummary";
-import { Separator } from "@/components/ui/separator";
+import { BillDrawer } from "@/components/cart/BillDrawer";
 import { useCartStore } from "@/store/useCartStore";
+
+const MAX_QUANTITY = 10; // Maximum allowed quantity per item
 
 const Cart = () => {
   const { 
     items, 
     totalItems, 
     totalPrice,
-    savedItems
+    savedItems,
+    updateQuantity
   } = useCart();
   
   const { isSubmitting, initiateCheckout } = useCartStore();
   const navigate = useNavigate();
-  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+
+  const handleQuantityUpdate = (productId: number, newQty: number) => {
+    if (newQty > MAX_QUANTITY) {
+      toast.error(`Maximum quantity allowed is ${MAX_QUANTITY}`);
+      return;
+    }
+    updateQuantity(productId, newQty);
+  };
 
   const handleCheckout = async () => {
     const result = await initiateCheckout();
     
     if (result.success && result.orderUrl) {
-      // In a real app, you would redirect to Razorpay using the orderUrl
-      // window.location.href = result.orderUrl;
-      
-      // For now, we'll show a toast notification
       toast.info("Redirecting to Razorpay payment gateway...");
-      
-      // Simulate a successful payment after a delay
       setTimeout(() => {
         toast.success("Payment successful!");
         navigate("/order-success");
@@ -46,7 +49,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen pb-16">
+    <div className="flex flex-col min-h-screen">
       <Header />
       
       <main className="flex-grow">
@@ -62,51 +65,64 @@ const Cart = () => {
           <h1 className="text-xl font-semibold">Your Cart</h1>
         </div>
 
-        {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 h-64">
-            <p className="text-lg text-gray-500 mb-4">Your cart is empty</p>
-            <Button onClick={() => navigate('/')} className="bg-product-accent hover:bg-product-secondary">
-              Continue Shopping
-            </Button>
-          </div>
-        ) : (
-          <div className="flex flex-col">
-            {/* Cart items */}
-            <div className="p-4">
-              <h2 className="font-medium text-lg mb-2">Cart ({totalItems} items)</h2>
-              <div className="space-y-1">
-                {items.map((item) => (
-                  <CartItem key={item.productId} item={item} />
-                ))}
-              </div>
-            </div>
-            
-            {/* Saved for later */}
-            {savedItems.length > 0 && (
-              <div className="px-4 pb-4">
-                <h2 className="font-medium text-lg mb-2">Saved for later ({savedItems.length})</h2>
+        <div className="flex flex-col">
+          {/* Cart items */}
+          <div className="p-4">
+            {items.length > 0 ? (
+              <>
+                <h2 className="font-medium text-lg mb-2">Cart ({totalItems} items)</h2>
                 <div className="space-y-1">
-                  {savedItems.map((item) => (
-                    <SavedForLaterItem key={item.productId} item={item} />
+                  {items.map((item) => (
+                    <CartItem 
+                      key={item.productId} 
+                      item={item} 
+                      onUpdateQuantity={handleQuantityUpdate}
+                    />
                   ))}
                 </div>
+                
+                {/* Bill Summary Drawer */}
+                <div className="mt-4">
+                  <BillDrawer 
+                    subtotal={totalPrice}
+                    totalAmount={totalPrice}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8 h-64">
+                <p className="text-lg text-gray-500 mb-4">Your cart is empty</p>
+                <Button onClick={() => navigate('/')} className="bg-product-accent hover:bg-product-secondary">
+                  Continue Shopping
+                </Button>
               </div>
             )}
-
-            {/* Address selection */}
-            <AddressSelector />
-
-            {/* Bill Summary */}
-            <div className="p-4 pb-28">
-              <BillSummary subtotal={totalPrice} totalAmount={totalPrice} />
-            </div>
           </div>
-        )}
+          
+          {/* Saved for later - always visible */}
+          <div className="px-4 pb-4">
+            <h2 className="font-medium text-lg mb-2">
+              Saved for later ({savedItems.length})
+            </h2>
+            {savedItems.length > 0 ? (
+              <div className="space-y-1">
+                {savedItems.map((item) => (
+                  <SavedForLaterItem key={item.productId} item={item} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-sm">No items saved for later</p>
+            )}
+          </div>
+
+          {/* Address selection */}
+          <AddressSelector />
+        </div>
       </main>
 
       {/* Payment summary fixed at the bottom */}
       {items.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-20">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-600">To pay</p>

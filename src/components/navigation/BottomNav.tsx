@@ -1,10 +1,15 @@
-
 import { Home, Compass, ShoppingBag, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 export function BottomNav() {
   const location = useLocation();
+  
+  // Hide bottom nav on cart page
+  if (location.pathname === '/cart') {
+    return null;
+  }
+
   const isActive = (path: string) => location.pathname === path;
 
   const navItems = [

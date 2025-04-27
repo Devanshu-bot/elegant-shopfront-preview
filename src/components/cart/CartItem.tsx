@@ -7,10 +7,11 @@ import { Link } from "react-router-dom";
 
 interface CartItemProps {
   item: CartItemType;
+  onUpdateQuantity: (productId: number, quantity: number) => void;
 }
 
-export const CartItem = ({ item }: CartItemProps) => {
-  const { removeFromCart, updateQuantity, saveForLater } = useCart();
+export const CartItem = ({ item, onUpdateQuantity }: CartItemProps) => {
+  const { removeFromCart, saveForLater } = useCart();
   
   return (
     <div className="flex gap-3 items-center py-3 border-b border-gray-100">
@@ -40,7 +41,7 @@ export const CartItem = ({ item }: CartItemProps) => {
         <div className="inline-flex items-center border rounded-md">
           {item.quantity > 1 ? (
             <Button
-              onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+              onClick={() => onUpdateQuantity(item.productId, item.quantity - 1)}
               className="px-2 py-1 h-8 border-r border-gray-200 bg-white hover:bg-gray-50 text-black rounded-none rounded-l-md"
               variant="ghost"
               size="icon"
@@ -59,7 +60,7 @@ export const CartItem = ({ item }: CartItemProps) => {
           )}
           <span className="px-3 py-1 text-sm">{item.quantity}</span>
           <Button
-            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+            onClick={() => onUpdateQuantity(item.productId, item.quantity + 1)}
             className="px-2 py-1 h-8 border-l border-gray-200 bg-white hover:bg-gray-50 text-black rounded-none rounded-r-md"
             variant="ghost"
             size="icon"
