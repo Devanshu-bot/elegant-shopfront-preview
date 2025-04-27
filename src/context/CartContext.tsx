@@ -3,27 +3,29 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { useCartStore } from '@/store/useCartStore';
 import { CartItem } from '@/types/cart';
 import { toast } from 'sonner';
+import { useWishlistStore } from '@/store/useWishlistStore';
 
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: any) => void;
-  removeFromCart: (index: number) => void;
-  updateQuantity: (index: number, quantity: number) => void;
+  removeFromCart: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
   promoDiscount: number;
   applyPromoCode: (code: string) => void;
   estimatedDeliveryDays: number;
-  saveForLater: (index: number) => void;
+  saveForLater: (productId: number) => void;
   savedItems: any[];
-  moveToCart: (index: number) => void;
+  moveToCart: (productId: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const cartStore = useCartStore();
+  const wishlistStore = useWishlistStore();
   
   // Calculate total items
   const totalItems = cartStore.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -35,7 +37,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   
   // Dummy data for now
   const estimatedDeliveryDays = 3;
-  const savedItems: any[] = [];
+  const savedItems = wishlistStore.items;
 
   const addToCart = (item: any) => {
     cartStore.addItem({
@@ -62,12 +64,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const saveForLater = (index: number) => {
-    toast.success('Item saved for later');
+  const saveForLater = (productId: number) => {
+    const item = cartStore.items.find(item => item.productId === productId);
+    if (item) {
+      // First add to wishlist
+      wishlistStore.addToWishlist({
+        productId: item.productId,
+        name: item.name,
+        image: item.image,
+        price: item.price,
+      });
+      
+      // Then remove from cart
+      cartStore.removeItem(productId);
+    }
   };
 
-  const moveToCart = (index: number) => {
-    toast.success('Item moved to cart');
+  const moveToCart = (productId: number) => {
+    const item = wishlistStore.items.find(item => item.productId === productId);
+    if (item) {
+      cartStore.addItem({
+        productId: item.productId,
+        name: item.name,
+        image: item.image,
+        price: item.price,
+        quantity: 1,
+      });
+      
+      // Remove from wishlist
+      wishlistStore.removeFromWishlist(productId);
+      
+      toast.success('Item moved to cart');
+    }
   };
 
   const value = {

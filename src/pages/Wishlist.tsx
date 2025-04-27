@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Heart, ShoppingBag, ArrowLeft, Trash2, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -72,17 +72,22 @@ const Wishlist = () => {
                     viewMode === "list" ? "flex" : ""
                   }`}
                 >
-                  <div className={`${viewMode === "list" ? "w-48" : "h-64"} bg-gray-100`}>
+                  <Link 
+                    to={`/products/${product.productId}`}
+                    className={`${viewMode === "list" ? "w-48" : "h-64"} bg-gray-100 block`}
+                  >
                     <img 
                       src={product.image} 
                       alt={product.name} 
                       className="h-full w-full object-cover"
                     />
-                  </div>
+                  </Link>
                   <div className={`p-4 ${viewMode === "list" ? "flex-grow" : ""}`}>
-                    <h2 className="text-lg font-medium text-gray-900 mb-1">{product.name}</h2>
+                    <Link to={`/products/${product.productId}`}>
+                      <h2 className="text-lg font-medium text-gray-900 mb-1 hover:text-product-accent">{product.name}</h2>
+                    </Link>
                     <div className="flex items-center mb-3">
-                      <span className="text-product-accent font-medium">${product.price.toFixed(2)}</span>
+                      <span className="text-product-accent font-medium">₹{product.price.toFixed(2)}</span>
                     </div>
                     <div className="flex space-x-2">
                       <Button 
