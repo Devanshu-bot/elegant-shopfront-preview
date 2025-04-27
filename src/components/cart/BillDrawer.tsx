@@ -8,7 +8,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface BillDrawerProps {
   subtotal: number;
@@ -34,12 +33,18 @@ export const BillDrawer = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="ghost" className="w-full flex justify-between items-center py-4">
-          <span className="text-lg font-semibold">View order summary</span>
-          <ChevronDown size={20} />
-        </Button>
+        <div className="flex flex-col w-full cursor-pointer">
+          <span className="text-sm text-gray-500">To pay</span>
+          <div className="flex items-center justify-between">
+            <span className="text-xl font-semibold">₹{totalAmount.toFixed(2)}</span>
+            <div className="flex items-center gap-1 text-gray-500">
+              <span>View Bill Details</span>
+              <ChevronDown size={16} />
+            </div>
+          </div>
+        </div>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="bg-white">
         <DrawerHeader>
           <DrawerTitle>Bill Details</DrawerTitle>
         </DrawerHeader>
