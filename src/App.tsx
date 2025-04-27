@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +22,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Categories from "./pages/Categories";
+import OrderSuccess from "./pages/OrderSuccess";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +47,7 @@ const App = () => (
               <Route path="/auth/verify" element={<VerifyScreen />} />
               <Route path="/auth/forgot-password" element={<ForgotPasswordScreen />} />
               <Route path="/auth/reset-password" element={<ResetPasswordScreen />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
