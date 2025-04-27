@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { Category } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
@@ -10,8 +11,9 @@ export function CategoryTabs({ categories }: CategoryTabsProps) {
   return (
     <div className="flex overflow-x-auto gap-2 p-4 no-scrollbar">
       {categories.map((category) => (
-        <button
+        <Link
           key={category.id}
+          to={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
           className={cn(
             "px-6 py-2 rounded-full whitespace-nowrap",
             category.name === "Apparel"
@@ -20,12 +22,15 @@ export function CategoryTabs({ categories }: CategoryTabsProps) {
           )}
         >
           {category.name}
-        </button>
+        </Link>
       ))}
-      <button className="px-6 py-2 rounded-full bg-gray-100 text-gray-900 whitespace-nowrap flex items-center gap-1">
+      <Link 
+        to="/categories" 
+        className="px-6 py-2 rounded-full bg-gray-100 text-gray-900 whitespace-nowrap flex items-center gap-1"
+      >
         <span>Show more</span>
         <span className="text-lg">⋯</span>
-      </button>
+      </Link>
     </div>
   );
 }

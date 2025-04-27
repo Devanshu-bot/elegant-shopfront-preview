@@ -20,6 +20,7 @@ import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
+import Categories from "./pages/Categories";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Sonner />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/categories" element={<Categories />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/products" element={<Products />} />

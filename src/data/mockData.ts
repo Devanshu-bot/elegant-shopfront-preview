@@ -1,4 +1,3 @@
-
 export interface Category {
   id: string;
   name: string;
@@ -122,5 +121,48 @@ export const dealsProducts: Product[] = [
     name: 'Smart Speaker',
     image: 'https://images.unsplash.com/photo-1589256469067-ea99122bbdc9?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     price: 199
+  }
+];
+
+export const allCategories = [
+  {
+    group: "Technology",
+    items: [
+      { 
+        slug: "laptops", 
+        name: "Laptops", 
+        image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      },
+      { 
+        slug: "phones", 
+        name: "Phones", 
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      },
+      { 
+        slug: "watches", 
+        name: "Watches", 
+        image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      }
+    ]
+  },
+  {
+    group: "Home & Living",
+    items: [
+      { 
+        slug: "furniture", 
+        name: "Furniture", 
+        image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      },
+      { 
+        slug: "lighting", 
+        name: "Lighting", 
+        image: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      },
+      { 
+        slug: "kitchen", 
+        name: "Kitchen", 
+        image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+      }
+    ]
   }
 ];

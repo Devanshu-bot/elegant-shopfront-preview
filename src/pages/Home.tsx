@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { CategoryTabs } from "@/components/home/CategoryTabs";
 import { HeroCarousel } from "@/components/home/HeroCarousel";
 import { ProductCard } from "@/components/home/ProductCard";
@@ -23,9 +24,13 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4">Latest Products</h2>
           <div className="flex overflow-x-auto gap-4 -mx-4 px-4 no-scrollbar">
             {latestProducts.map((product) => (
-              <div key={product.id} className="w-32 flex-shrink-0">
+              <Link 
+                key={product.id} 
+                to={`/products/${product.id}`} 
+                className="w-32 flex-shrink-0"
+              >
                 <ProductCard product={product} />
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -34,7 +39,12 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4">Keep shopping for</h2>
           <div className="flex overflow-x-auto gap-6 -mx-4 px-4 no-scrollbar">
             {shoppingCategories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
+              <Link 
+                key={category.id} 
+                to={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <CategoryCard key={category.id} category={category} />
+              </Link>
             ))}
           </div>
         </section>
@@ -43,7 +53,9 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4">Deals for you</h2>
           <div className="grid grid-cols-2 gap-4">
             {dealsProducts.map((product) => (
-              <ProductCard key={product.id} product={product} showDetails />
+              <Link key={product.id} to={`/products/${product.id}`}>
+                <ProductCard product={product} showDetails />
+              </Link>
             ))}
           </div>
         </section>

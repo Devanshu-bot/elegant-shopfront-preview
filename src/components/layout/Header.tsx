@@ -1,4 +1,3 @@
-
 import { Search, ShoppingBag, User, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
@@ -34,16 +33,6 @@ export function Header() {
           >
             pie
           </div>
-          
-          {showHamburgerMenu && (
-            <nav className="hidden lg:flex space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-product-accent cursor-pointer">Home</Link>
-              <Link to="/products" className="text-gray-700 hover:text-product-accent cursor-pointer">Shop</Link>
-              <Link to="/products" className="text-gray-700 hover:text-product-accent cursor-pointer">Categories</Link>
-              <a className="text-gray-700 hover:text-product-accent cursor-pointer">About</a>
-              <a className="text-gray-700 hover:text-product-accent cursor-pointer">Contact</a>
-            </nav>
-          )}
           
           <div className="flex items-center space-x-4">
             <button className="p-2 rounded-md hover:bg-gray-100 hidden md:block">
